@@ -13,9 +13,11 @@ type OrganizedFolder struct {
 }
 
 func match(organizedFolders []OrganizedFolder, filetype string) string {
+	filetype = strings.ToLower(strings.TrimPrefix(filetype, "."))
+
 	for _, f := range organizedFolders {
 		for _, fileType := range f.FileTypes {
-			if fileType == filetype {
+			if strings.ToLower(strings.TrimPrefix(fileType, ".")) == filetype {
 				return f.Name
 			}
 		}
@@ -24,22 +26,27 @@ func match(organizedFolders []OrganizedFolder, filetype string) string {
 }
 
 func getFileType(path string) string {
+	extension := filepath.Ext(path)
+	if extension == "" {
+		return ""
+	}
 
-	split := strings.Split(path, ".")
-
-	return split[len(split)-1]
+	return strings.ToLower(strings.TrimPrefix(extension, "."))
 }
 
 func main() {
 
 	dirPath := "/Users/cfa/Downloads"
 
-	var organizedFolder = make([]OrganizedFolder, 30)
-	organizedFolder[0] = OrganizedFolder{"Images", []string{"jpg", "png"}}
-	organizedFolder[1] = OrganizedFolder{"Videos", []string{"mp4"}}
-	organizedFolder[2] = OrganizedFolder{"Documents", []string{"pdf"}}
-
-	fmt.Println(organizedFolder)
+	organizedFolder := []OrganizedFolder{
+		{Name: "Images", FileTypes: []string{"jpg", "jpeg", "png", "gif", "webp", "svg"}},
+		{Name: "Videos", FileTypes: []string{"mp4", "mov", "avi", "mkv", "webm"}},
+		{Name: "Audio", FileTypes: []string{"mp3", "wav", "flac", "m4a", "ogg"}},
+		{Name: "Documents", FileTypes: []string{"pdf", "doc", "docx", "odt", "xls", "xlsx", "ppt", "pptx", "txt", "csv"}},
+		{Name: "Archives", FileTypes: []string{"zip", "rar", "7z", "tar", "gz"}},
+		{Name: "Apps", FileTypes: []string{"app", "exe", "dmg", "apk", "ipa"}},
+		{Name: "Installers", FileTypes: []string{"msi", "pkg", "deb", "rpm"}},
+	}
 
 	dir, err := os.ReadDir(dirPath)
 	if err != nil {
@@ -56,7 +63,8 @@ func main() {
 		}
 	}
 
-	fmt.Println(dirFolders)
+	fmt.Printf("%v entities found in %v\n", len(dir)-len(dirFolders), dirPath)
+	fmt.Println("Starting to organize...")
 
 	for _, organizedF := range organizedFolder {
 		folderPath := filepath.Join(dirPath, organizedF.Name)
@@ -68,6 +76,10 @@ func main() {
 	}
 
 	for _, file := range dir {
+		if file.IsDir() {
+			continue
+		}
+
 		matchStr := match(organizedFolder, getFileType(file.Name()))
 
 		if matchStr == "NONE" {
@@ -78,5 +90,9 @@ func main() {
 		if err != nil {
 			return
 		}
+
+		fmt.Println("Moved " + file.Name() + " to " + matchStr)
 	}
+
+	fmt.Println("Done!")
 }
