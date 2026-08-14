@@ -26,7 +26,6 @@ func match(organizedFolders []OrganizedFolder, filetype string) string {
 func getFileType(path string) string {
 
 	split := strings.Split(path, ".")
-	fmt.Println(len(split))
 
 	return split[len(split)-1]
 }
@@ -52,7 +51,6 @@ func main() {
 	var dirFolders []string
 
 	for _, file := range dir {
-		fmt.Println(file.Name(), file.IsDir())
 		if file.IsDir() {
 			dirFolders = append(dirFolders, file.Name())
 		}
@@ -65,7 +63,11 @@ func main() {
 
 		err := os.Mkdir(folderPath, 0755)
 		if err != nil {
-			return
+			// Folder already exists
 		}
+	}
+
+	for _, file := range dir {
+		fmt.Println(match(organizedFolder, getFileType(file.Name())))
 	}
 }
