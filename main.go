@@ -6,13 +6,13 @@ import (
 	"strings"
 )
 
-type Folder struct {
+type OrganizedFolder struct {
 	Name      string
 	FileTypes []string
 }
 
-func match(folders []Folder, filetype string) string {
-	for _, f := range folders {
+func match(organizedFolders []OrganizedFolder, filetype string) string {
+	for _, f := range organizedFolders {
 		for _, fileType := range f.FileTypes {
 			if fileType == filetype {
 				return f.Name
@@ -32,24 +32,30 @@ func getFileType(path string) string {
 
 func main() {
 
-	var folders = make([]Folder, 30)
-	folders[0] = Folder{"Images", []string{"jpg", "png"}}
-	folders[1] = Folder{"Videos", []string{"mp4"}}
-	folders[2] = Folder{"Documents", []string{"pdf"}}
+	dirPath := "/Users/cfa/Downloads"
 
-	fmt.Println(folders)
+	var organizedFolder = make([]OrganizedFolder, 30)
+	organizedFolder[0] = OrganizedFolder{"Images", []string{"jpg", "png"}}
+	organizedFolder[1] = OrganizedFolder{"Videos", []string{"mp4"}}
+	organizedFolder[2] = OrganizedFolder{"Documents", []string{"pdf"}}
 
-	dir, err := os.ReadDir("/Users/cfa/Downloads")
+	fmt.Println(organizedFolder)
+
+	dir, err := os.ReadDir(dirPath)
 	if err != nil {
 		return
 	}
 
 	fmt.Println(dir)
 
-	for _, file := range dir {
-		fmt.Println(file.Name())
-		fmt.Println(getFileType(file.Name()))
-		fmt.Println(match(folders, getFileType(file.Name())))
+	var dirFolders []string
 
+	for _, file := range dir {
+		fmt.Println(file.Name(), file.IsDir())
+		if file.IsDir() {
+			dirFolders = append(dirFolders, file.Name())
+		}
 	}
+
+	fmt.Println(dirFolders)
 }
