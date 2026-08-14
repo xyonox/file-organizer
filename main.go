@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -58,4 +59,13 @@ func main() {
 	}
 
 	fmt.Println(dirFolders)
+
+	for _, organizedF := range organizedFolder {
+		folderPath := filepath.Join(dirPath, organizedF.Name)
+
+		err := os.Mkdir(folderPath, 0755)
+		if err != nil {
+			return
+		}
+	}
 }
