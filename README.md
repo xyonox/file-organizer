@@ -27,7 +27,7 @@ Run the application with:
 go run .
 ```
 
-The application currently uses `/Users/cfa/Downloads` as its source directory. (TODO)
+The application currently uses `/Users/cfa/Downloads` as its source directory.
 
 ## Building a binary
 
@@ -44,15 +44,15 @@ their file extensions against the `organizedFolder` list in `main.go`.
 
 The following folders are currently supported:
 
-| Folder | File extensions |
-| --- | --- |
-| Images | `jpg`, `jpeg`, `png`, `gif`, `webp`, `svg` |
-| Videos | `mp4`, `mov`, `avi`, `mkv`, `webm` |
-| Audio | `mp3`, `wav`, `flac`, `m4a`, `ogg` |
-| Documents | `pdf`, `doc`, `docx`, `odt`, `xls`, `xlsx`, `ppt`, `pptx`, `txt`, `csv` |
-| Archives | `zip`, `rar`, `7z`, `tar`, `gz` |
-| Apps | `app`, `exe`, `dmg`, `apk`, `ipa` |
-| Installers | `msi`, `pkg`, `deb`, `rpm` |
+| Folder     | File extensions                                                         |
+|------------|-------------------------------------------------------------------------|
+| Images     | `jpg`, `jpeg`, `png`, `gif`, `webp`, `svg`                              |
+| Videos     | `mp4`, `mov`, `avi`, `mkv`, `webm`                                      |
+| Audio      | `mp3`, `wav`, `flac`, `m4a`, `ogg`                                      |
+| Documents  | `pdf`, `doc`, `docx`, `odt`, `xls`, `xlsx`, `ppt`, `pptx`, `txt`, `csv` |
+| Archives   | `zip`, `rar`, `7z`, `tar`, `gz`                                         |
+| Apps       | `app`, `exe`, `dmg`, `apk`, `ipa`                                       |
+| Installers | `msi`, `pkg`, `deb`, `rpm`                                              |
 
 Matching files are moved into the corresponding folder. Files without a
 matching extension remain in the source directory.
@@ -84,3 +84,7 @@ Done!
   are not scanned recursively.
 - Files with unsupported extensions are not moved.
 - Errors while creating folders or moving files are not reported in detail.
+
+## Next steps
+
+- Add support for choosing the source directory.
