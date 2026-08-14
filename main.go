@@ -68,6 +68,15 @@ func main() {
 	}
 
 	for _, file := range dir {
-		fmt.Println(match(organizedFolder, getFileType(file.Name())))
+		matchStr := match(organizedFolder, getFileType(file.Name()))
+
+		if matchStr == "NONE" {
+			continue
+		}
+
+		err := os.Rename(filepath.Join(dirPath, file.Name()), filepath.Join(dirPath, matchStr, file.Name()))
+		if err != nil {
+			return
+		}
 	}
 }
