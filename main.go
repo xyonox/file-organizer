@@ -38,6 +38,8 @@ func getFileType(path string) string {
 
 func main() {
 
+	dryRunFlag := flag.Bool("dry-run", false, "dry run")
+
 	dirPathFlag := flag.String("d", "", "set the directory path")
 
 	flag.Parse()
@@ -114,6 +116,27 @@ func main() {
 		if file.IsDir() {
 			dirFolders = append(dirFolders, file.Name())
 		}
+	}
+
+	if *dryRunFlag {
+		fmt.Println("Dry run mode enabled. No files will be moved.")
+
+		for _, file := range dir {
+			if file.IsDir() {
+				continue
+			}
+
+			matchStr := match(organizedFolder, getFileType(file.Name()))
+
+			if matchStr == "NONE" {
+				fmt.Printf("File %v would stay. Unknown file type\n", file.Name())
+				continue
+			}
+
+			fmt.Printf("File %v -> %v\n", file.Name(), matchStr)
+		}
+
+		return
 	}
 
 	fmt.Printf("%v entities found in %v\n", len(dir)-len(dirFolders), dirPath)
