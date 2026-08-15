@@ -100,5 +100,5 @@ Done!
 ## Next steps
 
 - Add recursive directory scanning.
-- Add a dry-run option and configurable categories.
+- Add configurable categories.
 - Improve error handling and reporting.
