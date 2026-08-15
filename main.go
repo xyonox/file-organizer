@@ -58,6 +58,7 @@ func main() {
 
 	dir, err := os.ReadDir(dirPath)
 	if err != nil {
+		fmt.Println("Error reading directory:", err)
 		return
 	}
 
@@ -96,7 +97,8 @@ func main() {
 
 		err := os.Rename(filepath.Join(dirPath, file.Name()), filepath.Join(dirPath, matchStr, file.Name()))
 		if err != nil {
-			return
+			fmt.Printf("Error moving %v: %v\n", file.Name(), err)
+			continue
 		}
 
 		fmt.Println("Moved " + file.Name() + " to " + matchStr)
