@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -37,16 +38,24 @@ func getFileType(path string) string {
 
 func main() {
 
-	fmt.Println("Enter the path to the directory you want to organize:")
-	fmt.Print("> ")
-	scanner := bufio.NewScanner(os.Stdin)
+	dirPathFlag := flag.String("d", "", "set the directory path")
 
-	if !scanner.Scan() {
-		fmt.Println("No input provided")
-		return
+	flag.Parse()
+
+	dirPath := *dirPathFlag
+
+	if dirPath == "" {
+		fmt.Println("Enter the path to the directory you want to organize:")
+		fmt.Print("> ")
+		scanner := bufio.NewScanner(os.Stdin)
+
+		if !scanner.Scan() {
+			fmt.Println("No input provided")
+			return
+		}
+
+		dirPath = scanner.Text()
 	}
-
-	dirPath := scanner.Text()
 
 	organizedFolder := []OrganizedFolder{
 		{Name: "Images", FileTypes: []string{"jpg", "jpeg", "png", "gif", "webp", "svg"}},
