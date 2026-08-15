@@ -9,7 +9,7 @@ The project was created as a learning project for:
 
 ## Features
 
-- Organizes files in the `/Users/cfa/Downloads` directory.
+- Organizes files in a directory supplied with the `-d` flag or entered interactively.
 - Creates category folders automatically when they do not exist.
 - Supports images, videos, audio files, documents, archives, apps and installers.
 - Recognizes file extensions regardless of uppercase or lowercase letters.
@@ -27,7 +27,12 @@ Run the application with:
 go run .
 ```
 
-The application currently uses `/Users/cfa/Downloads` as its source directory.
+When prompted, enter the path to the directory you want to organize. You can also
+provide the directory directly with the `-d` flag:
+
+```bash
+go run . -d /path/to/directory
+```
 
 ## Building a binary
 
@@ -39,8 +44,9 @@ go build -o file-organizer .
 
 ## How it works
 
-The application reads the files in the configured download directory and matches
-their file extensions against the `organizedFolder` list in `main.go`.
+The application reads the files directly inside the selected directory and matches
+their file extensions against the `organizedFolder` list in `main.go`. If no
+directory is provided with `-d`, the application prompts for one.
 
 The following folders are currently supported:
 
@@ -66,7 +72,7 @@ matching extension remain in the source directory.
 ## Example output
 
 ```text
-18 entities found in /Users/cfa/Downloads
+18 entities found in /path/to/directory
 Starting to organize...
 Moved setup.exe to Apps
 Moved archive.zip to Archives
@@ -78,18 +84,21 @@ Done!
 
 ```text
 .
-├── main.go       # 
+├── main.go       # Application source code
 ├── go.mod        # Go module definition
 └── README.md     # Project documentation
 ```
 
 ## Current limitations
 
-- The source directory is currently hard-coded in `main.go`.
-- Only files directly inside the source directory are organized; subdirectories
-  are not scanned recursively.
+- The application only organizes files directly inside the selected directory; it
+  does not scan subdirectories recursively.
 - Files with unsupported extensions are not moved.
-- Errors while creating folders or moving files are not reported in detail.
+- The application does not provide a dry-run mode or configurable categories.
+- Errors while creating category folders are not reported in detail.
 
 ## Next steps
 
+- Add recursive directory scanning.
+- Add a dry-run option and configurable categories.
+- Improve error handling and reporting.
