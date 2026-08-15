@@ -44,15 +44,21 @@ their file extensions against the `organizedFolder` list in `main.go`.
 
 The following folders are currently supported:
 
-| Folder     | File extensions                                                         |
-|------------|-------------------------------------------------------------------------|
-| Images     | `jpg`, `jpeg`, `png`, `gif`, `webp`, `svg`                              |
-| Videos     | `mp4`, `mov`, `avi`, `mkv`, `webm`                                      |
-| Audio      | `mp3`, `wav`, `flac`, `m4a`, `ogg`                                      |
-| Documents  | `pdf`, `doc`, `docx`, `odt`, `xls`, `xlsx`, `ppt`, `pptx`, `txt`, `csv` |
-| Archives   | `zip`, `rar`, `7z`, `tar`, `gz`                                         |
-| Apps       | `app`, `exe`, `dmg`, `apk`, `ipa`                                       |
-| Installers | `msi`, `pkg`, `deb`, `rpm`                                              |
+| Folder        | File extensions                                                                 |
+|---------------|---------------------------------------------------------------------------------|
+| Images        | `jpg`, `jpeg`, `png`, `gif`, `webp`, `svg`, `bmp`, `tiff`, `tif`, `heic`, `heif`, `ico`, `raw` |
+| Videos        | `mp4`, `mov`, `avi`, `mkv`, `webm`, `wmv`, `flv`, `mpeg`, `mpg`, `m4v`, `3gp` |
+| Audio         | `mp3`, `wav`, `flac`, `m4a`, `ogg`, `aac`, `wma`, `aiff`, `alac`, `mid`, `midi` |
+| Documents     | `pdf`, `doc`, `docx`, `odt`, `rtf`, `tex`, `txt`, `md`, `csv` |
+| Spreadsheets  | `xls`, `xlsx`, `ods`, `numbers` |
+| Presentations | `ppt`, `pptx`, `odp`, `key` |
+| Archives      | `zip`, `rar`, `7z`, `tar`, `gz`, `bz2`, `xz`, `iso` |
+| Apps          | `app`, `exe`, `dmg`, `apk`, `ipa` |
+| Installers    | `msi`, `pkg`, `deb`, `rpm`, `appimage` |
+| Code          | `go`, `js`, `ts`, `jsx`, `tsx`, `html`, `css`, `scss`, `json`, `xml`, `yaml`, `yml`, `py`, `java`, `c`, `cpp`, `h`, `hpp`, `cs`, `php`, `rb`, `rs`, `kt`, `swift`, `sh` |
+| Fonts         | `ttf`, `otf`, `woff`, `woff2`, `eot` |
+| Ebooks        | `epub`, `mobi`, `azw`, `azw3`, `fb2` |
+| Design        | `psd`, `ai`, `xd`, `fig`, `sketch`, `indd` |
 
 Matching files are moved into the corresponding folder. Files without a
 matching extension remain in the source directory.
@@ -87,5 +93,3 @@ Done!
 
 ## Next steps
 
-- support for more file extensions
-- support for more file types
