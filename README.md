@@ -87,6 +87,5 @@ Done!
 
 ## Next steps
 
-- flags to configure the source directory 
 - support for more file extensions
 - support for more file types
