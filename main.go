@@ -9,9 +9,22 @@ import (
 	"strings"
 )
 
+// OrganizedFolders -> TODO let the user define the organized folders over a JSON file
+type OrganizedFolders struct {
+	OrganizedFolder []OrganizedFolder `json:"organizedFolders"`
+}
+
 type OrganizedFolder struct {
-	Name      string
-	FileTypes []string
+	Name      string   `json:"name"`
+	FileTypes []string `json:"fileTypes"`
+}
+
+func loadConfig(folders OrganizedFolders) (OrganizedFolders, error) {
+	return folders, nil
+}
+
+func saveConfig(folders OrganizedFolders) error {
+	return nil
 }
 
 func match(organizedFolders []OrganizedFolder, filetype string) string {
