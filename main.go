@@ -37,6 +37,8 @@ func getFileType(path string) string {
 
 func main() {
 
+	fmt.Println("Enter the path to the directory you want to organize:")
+	fmt.Print("> ")
 	scanner := bufio.NewScanner(os.Stdin)
 
 	if !scanner.Scan() {
