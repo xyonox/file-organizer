@@ -58,13 +58,46 @@ func main() {
 	}
 
 	organizedFolder := []OrganizedFolder{
-		{Name: "Images", FileTypes: []string{"jpg", "jpeg", "png", "gif", "webp", "svg"}},
-		{Name: "Videos", FileTypes: []string{"mp4", "mov", "avi", "mkv", "webm"}},
-		{Name: "Audio", FileTypes: []string{"mp3", "wav", "flac", "m4a", "ogg"}},
-		{Name: "Documents", FileTypes: []string{"pdf", "doc", "docx", "odt", "xls", "xlsx", "ppt", "pptx", "txt", "csv"}},
-		{Name: "Archives", FileTypes: []string{"zip", "rar", "7z", "tar", "gz"}},
-		{Name: "Apps", FileTypes: []string{"app", "exe", "dmg", "apk", "ipa"}},
-		{Name: "Installers", FileTypes: []string{"msi", "pkg", "deb", "rpm"}},
+		{Name: "Images", FileTypes: []string{
+			"jpg", "jpeg", "png", "gif", "webp", "svg", "bmp", "tiff", "tif", "heic", "heif", "ico", "raw",
+		}},
+		{Name: "Videos", FileTypes: []string{
+			"mp4", "mov", "avi", "mkv", "webm", "wmv", "flv", "mpeg", "mpg", "m4v", "3gp",
+		}},
+		{Name: "Audio", FileTypes: []string{
+			"mp3", "wav", "flac", "m4a", "ogg", "aac", "wma", "aiff", "alac", "mid", "midi",
+		}},
+		{Name: "Documents", FileTypes: []string{
+			"pdf", "doc", "docx", "odt", "rtf", "tex", "txt", "md", "csv",
+		}},
+		{Name: "Spreadsheets", FileTypes: []string{
+			"xls", "xlsx", "ods", "numbers",
+		}},
+		{Name: "Presentations", FileTypes: []string{
+			"ppt", "pptx", "odp", "key",
+		}},
+		{Name: "Archives", FileTypes: []string{
+			"zip", "rar", "7z", "tar", "gz", "bz2", "xz", "iso",
+		}},
+		{Name: "Apps", FileTypes: []string{
+			"app", "exe", "dmg", "apk", "ipa",
+		}},
+		{Name: "Installers", FileTypes: []string{
+			"msi", "pkg", "deb", "rpm", "appimage",
+		}},
+		{Name: "Code", FileTypes: []string{
+			"go", "js", "ts", "jsx", "tsx", "html", "css", "scss", "json", "xml", "yaml", "yml",
+			"py", "java", "c", "cpp", "h", "hpp", "cs", "php", "rb", "rs", "kt", "swift", "sh",
+		}},
+		{Name: "Fonts", FileTypes: []string{
+			"ttf", "otf", "woff", "woff2", "eot",
+		}},
+		{Name: "Ebooks", FileTypes: []string{
+			"epub", "mobi", "azw", "azw3", "fb2",
+		}},
+		{Name: "Design", FileTypes: []string{
+			"psd", "ai", "xd", "fig", "sketch", "indd",
+		}},
 	}
 
 	dir, err := os.ReadDir(dirPath)
