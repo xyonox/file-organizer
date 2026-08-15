@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -36,7 +37,14 @@ func getFileType(path string) string {
 
 func main() {
 
-	dirPath := "/Users/cfa/Downloads"
+	scanner := bufio.NewScanner(os.Stdin)
+
+	if !scanner.Scan() {
+		fmt.Println("No input provided")
+		return
+	}
+
+	dirPath := scanner.Text()
 
 	organizedFolder := []OrganizedFolder{
 		{Name: "Images", FileTypes: []string{"jpg", "jpeg", "png", "gif", "webp", "svg"}},
