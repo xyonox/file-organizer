@@ -87,4 +87,6 @@ Done!
 
 ## Next steps
 
-- Add support for choosing the source directory.
+- flags to configure the source directory 
+- support for more file extensions
+- support for more file types
