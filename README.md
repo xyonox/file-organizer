@@ -13,6 +13,8 @@ The project was created as a learning project for:
 - Creates category folders automatically when they do not exist.
 - Supports images, videos, audio files, documents, archives, apps and installers.
 - Recognizes file extensions regardless of uppercase or lowercase letters.
+- Loads folder and extension mappings from `organizedFolders.json`.
+- Supports a dry-run mode that shows planned moves without changing files.
 - Leaves unsupported files and existing directories untouched.
 
 ## Requirements
@@ -34,6 +36,14 @@ provide the directory directly with the `-d` flag:
 go run . -d /path/to/directory
 ```
 
+To preview the changes without moving any files, use `--dry-run`:
+
+```bash
+go run . -d /path/to/directory --dry-run
+```
+
+The `-d` and `--dry-run` flags can also be used with a built binary.
+
 ## Building a binary
 
 Build the application with:
@@ -45,26 +55,42 @@ go build -o file-organizer .
 ## How it works
 
 The application reads the files directly inside the selected directory and matches
-their file extensions against the `organizedFolder` list in `main.go`. If no
-directory is provided with `-d`, the application prompts for one.
+their file extensions against the `organizedFolders` list. If no directory is
+provided with `-d`, the application prompts for one.
+
+On startup, the application loads `organizedFolders.json` from the current working
+directory. If the file does not exist or contains invalid JSON, the built-in default
+categories are used and saved to that file. You can customize the categories by
+editing the JSON configuration. Each entry has a `name` and a `fileTypes` array:
+
+```json
+{
+  "organizedFolders": [
+    {
+      "name": "Images",
+      "fileTypes": ["jpg", "jpeg", "png"]
+    }
+  ]
+}
+```
 
 The following folders are currently supported:
 
-| Folder        | File extensions                                                                 |
-|---------------|---------------------------------------------------------------------------------|
-| Images        | `jpg`, `jpeg`, `png`, `gif`, `webp`, `svg`, `bmp`, `tiff`, `tif`, `heic`, `heif`, `ico`, `raw` |
-| Videos        | `mp4`, `mov`, `avi`, `mkv`, `webm`, `wmv`, `flv`, `mpeg`, `mpg`, `m4v`, `3gp` |
-| Audio         | `mp3`, `wav`, `flac`, `m4a`, `ogg`, `aac`, `wma`, `aiff`, `alac`, `mid`, `midi` |
-| Documents     | `pdf`, `doc`, `docx`, `odt`, `rtf`, `tex`, `txt`, `md`, `csv` |
-| Spreadsheets  | `xls`, `xlsx`, `ods`, `numbers` |
-| Presentations | `ppt`, `pptx`, `odp`, `key` |
-| Archives      | `zip`, `rar`, `7z`, `tar`, `gz`, `bz2`, `xz`, `iso` |
-| Apps          | `app`, `exe`, `dmg`, `apk`, `ipa` |
-| Installers    | `msi`, `pkg`, `deb`, `rpm`, `appimage` |
+| Folder        | File extensions                                                                                                                                                         |
+|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Images        | `jpg`, `jpeg`, `png`, `gif`, `webp`, `svg`, `bmp`, `tiff`, `tif`, `heic`, `heif`, `ico`, `raw`                                                                          |
+| Videos        | `mp4`, `mov`, `avi`, `mkv`, `webm`, `wmv`, `flv`, `mpeg`, `mpg`, `m4v`, `3gp`                                                                                           |
+| Audio         | `mp3`, `wav`, `flac`, `m4a`, `ogg`, `aac`, `wma`, `aiff`, `alac`, `mid`, `midi`                                                                                         |
+| Documents     | `pdf`, `doc`, `docx`, `odt`, `rtf`, `tex`, `txt`, `md`, `csv`                                                                                                           |
+| Spreadsheets  | `xls`, `xlsx`, `ods`, `numbers`                                                                                                                                         |
+| Presentations | `ppt`, `pptx`, `odp`, `key`                                                                                                                                             |
+| Archives      | `zip`, `rar`, `7z`, `tar`, `gz`, `bz2`, `xz`, `iso`                                                                                                                     |
+| Apps          | `app`, `exe`, `dmg`, `apk`, `ipa`                                                                                                                                       |
+| Installers    | `msi`, `pkg`, `deb`, `rpm`, `appimage`                                                                                                                                  |
 | Code          | `go`, `js`, `ts`, `jsx`, `tsx`, `html`, `css`, `scss`, `json`, `xml`, `yaml`, `yml`, `py`, `java`, `c`, `cpp`, `h`, `hpp`, `cs`, `php`, `rb`, `rs`, `kt`, `swift`, `sh` |
-| Fonts         | `ttf`, `otf`, `woff`, `woff2`, `eot` |
-| Ebooks        | `epub`, `mobi`, `azw`, `azw3`, `fb2` |
-| Design        | `psd`, `ai`, `xd`, `fig`, `sketch`, `indd` |
+| Fonts         | `ttf`, `otf`, `woff`, `woff2`, `eot`                                                                                                                                    |
+| Ebooks        | `epub`, `mobi`, `azw`, `azw3`, `fb2`                                                                                                                                    |
+| Design        | `psd`, `ai`, `xd`, `fig`, `sketch`, `indd`                                                                                                                              |
 
 Matching files are moved into the corresponding folder. Files without a
 matching extension remain in the source directory.
@@ -84,9 +110,10 @@ Done!
 
 ```text
 .
-├── main.go       # Application source code
-├── go.mod        # Go module definition
-└── README.md     # Project documentation
+├── main.go               # Application source code
+├── organizedFolders.json # Folder and extension configuration
+├── go.mod                # Go module definition
+└── README.md             # Project documentation
 ```
 
 ## Current limitations
@@ -94,11 +121,11 @@ Done!
 - The application only organizes files directly inside the selected directory; it
   does not scan subdirectories recursively.
 - Files with unsupported extensions are not moved.
-- The application does not provide a dry-run mode or configurable categories.
-- Errors while creating category folders are not reported in detail.
+- The configuration file is loaded from the current working directory rather than
+  from the directory being organized.
+- Existing files with the same name in a destination folder may cause a move error.
 
 ## Next steps
 
 - Add recursive directory scanning.
-- Add configurable categories.
 - Improve error handling and reporting.
