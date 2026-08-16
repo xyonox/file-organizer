@@ -1,0 +1,187 @@
+{
+  "organizedFolders": [
+    {
+      "name": "Images",
+      "fileTypes": [
+        "jpg",
+        "jpeg",
+        "png",
+        "gif",
+        "webp",
+        "svg",
+        "bmp",
+        "tiff",
+        "tif",
+        "heic",
+        "heif",
+        "ico",
+        "raw"
+      ]
+    },
+    {
+      "comment": "This is a example",
+      "name": "test",
+      "fileTypes": [
+        "test"
+      ]
+    },
+    {
+      "name": "Videos",
+      "fileTypes": [
+        "mp4",
+        "mov",
+        "avi",
+        "mkv",
+        "webm",
+        "wmv",
+        "flv",
+        "mpeg",
+        "mpg",
+        "m4v",
+        "3gp"
+      ]
+    },
+    {
+      "name": "Audio",
+      "fileTypes": [
+        "mp3",
+        "wav",
+        "flac",
+        "m4a",
+        "ogg",
+        "aac",
+        "wma",
+        "aiff",
+        "alac",
+        "mid",
+        "midi"
+      ]
+    },
+    {
+      "name": "Documents",
+      "fileTypes": [
+        "pdf",
+        "doc",
+        "docx",
+        "odt",
+        "rtf",
+        "tex",
+        "txt",
+        "md",
+        "csv"
+      ]
+    },
+    {
+      "name": "Spreadsheets",
+      "fileTypes": [
+        "xls",
+        "xlsx",
+        "ods",
+        "numbers"
+      ]
+    },
+    {
+      "name": "Presentations",
+      "fileTypes": [
+        "ppt",
+        "pptx",
+        "odp",
+        "key"
+      ]
+    },
+    {
+      "name": "Archives",
+      "fileTypes": [
+        "zip",
+        "rar",
+        "7z",
+        "tar",
+        "gz",
+        "bz2",
+        "xz",
+        "iso"
+      ]
+    },
+    {
+      "name": "Apps",
+      "fileTypes": [
+        "app",
+        "exe",
+        "dmg",
+        "apk",
+        "ipa"
+      ]
+    },
+    {
+      "name": "Installers",
+      "fileTypes": [
+        "msi",
+        "pkg",
+        "deb",
+        "rpm",
+        "appimage"
+      ]
+    },
+    {
+      "name": "Code",
+      "fileTypes": [
+        "go",
+        "js",
+        "ts",
+        "jsx",
+        "tsx",
+        "html",
+        "css",
+        "scss",
+        "json",
+        "xml",
+        "yaml",
+        "yml",
+        "py",
+        "java",
+        "c",
+        "cpp",
+        "h",
+        "hpp",
+        "cs",
+        "php",
+        "rb",
+        "rs",
+        "kt",
+        "swift",
+        "sh"
+      ]
+    },
+    {
+      "name": "Fonts",
+      "fileTypes": [
+        "ttf",
+        "otf",
+        "woff",
+        "woff2",
+        "eot"
+      ]
+    },
+    {
+      "name": "Ebooks",
+      "fileTypes": [
+        "epub",
+        "mobi",
+        "azw",
+        "azw3",
+        "fb2"
+      ]
+    },
+    {
+      "name": "Design",
+      "fileTypes": [
+        "psd",
+        "ai",
+        "xd",
+        "fig",
+        "sketch",
+        "indd"
+      ]
+    }
+  ]
+}
