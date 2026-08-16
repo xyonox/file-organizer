@@ -266,24 +266,52 @@ func main() {
 
 	// TODO: Add recursive directory scanning.
 
-	for _, file := range dir {
-		if file.IsDir() {
-			continue
+	if *recursiveFlag {
+		for _, dirFolder := range dirFolders {
+			readDir, err := os.ReadDir(filepath.Join(dirPath, dirFolder))
+			if err != nil {
+				return
+			}
+			for _, file := range readDir {
+				if file.IsDir() {
+					continue
+				}
+
+				matchStr := match(organizedFolder, getFileType(file.Name()))
+
+				if matchStr == "NONE" {
+					continue
+				}
+
+				err := os.Rename(filepath.Join(dirPath, dirFolder, file.Name()), filepath.Join(dirPath, matchStr, file.Name()))
+				if err != nil {
+					fmt.Printf("Error moving %v: %v\n", file.Name(), err)
+					continue
+				}
+
+				fmt.Println("Moved " + file.Name() + " to " + matchStr)
+			}
 		}
+	} else {
+		for _, file := range dir {
+			if file.IsDir() {
+				continue
+			}
 
-		matchStr := match(organizedFolder, getFileType(file.Name()))
+			matchStr := match(organizedFolder, getFileType(file.Name()))
 
-		if matchStr == "NONE" {
-			continue
+			if matchStr == "NONE" {
+				continue
+			}
+
+			err := os.Rename(filepath.Join(dirPath, file.Name()), filepath.Join(dirPath, matchStr, file.Name()))
+			if err != nil {
+				fmt.Printf("Error moving %v: %v\n", file.Name(), err)
+				continue
+			}
+
+			fmt.Println("Moved " + file.Name() + " to " + matchStr)
 		}
-
-		err := os.Rename(filepath.Join(dirPath, file.Name()), filepath.Join(dirPath, matchStr, file.Name()))
-		if err != nil {
-			fmt.Printf("Error moving %v: %v\n", file.Name(), err)
-			continue
-		}
-
-		fmt.Println("Moved " + file.Name() + " to " + matchStr)
 	}
 
 	fmt.Println("Done!")
