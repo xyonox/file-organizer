@@ -91,6 +91,16 @@ func loadConfig() (OrganizedFolders, error) {
 }
 
 func saveConfig(folders OrganizedFolders) error {
+	out, err := json.MarshalIndent(folders, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile("organizedFolders.json", out, 0644)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
