@@ -252,7 +252,7 @@ func main() {
 		return
 	}
 
-	fmt.Printf("%v entities found in %v\n", len(dir)-len(dirFolders), dirPath)
+	//fmt.Printf("%v entities found in %v\n", len(dir)-len(dirFolders), dirPath)
 	fmt.Println("Starting to organize...")
 
 	for _, organizedF := range organizedFolder {
@@ -263,8 +263,6 @@ func main() {
 			// Folder already exists
 		}
 	}
-
-	// TODO: Add recursive directory scanning.
 
 	if *recursiveFlag {
 		for _, dirFolder := range dirFolders {
