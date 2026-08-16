@@ -2,12 +2,56 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 )
+
+var preOrganizedFolders OrganizedFolders = OrganizedFolders{OrganizedFolder: []OrganizedFolder{
+	{Name: "Images", FileTypes: []string{
+		"jpg", "jpeg", "png", "gif", "webp", "svg", "bmp", "tiff", "tif", "heic", "heif", "ico", "raw",
+	}},
+	{Name: "Videos", FileTypes: []string{
+		"mp4", "mov", "avi", "mkv", "webm", "wmv", "flv", "mpeg", "mpg", "m4v", "3gp",
+	}},
+	{Name: "Audio", FileTypes: []string{
+		"mp3", "wav", "flac", "m4a", "ogg", "aac", "wma", "aiff", "alac", "mid", "midi",
+	}},
+	{Name: "Documents", FileTypes: []string{
+		"pdf", "doc", "docx", "odt", "rtf", "tex", "txt", "md", "csv",
+	}},
+	{Name: "Spreadsheets", FileTypes: []string{
+		"xls", "xlsx", "ods", "numbers",
+	}},
+	{Name: "Presentations", FileTypes: []string{
+		"ppt", "pptx", "odp", "key",
+	}},
+	{Name: "Archives", FileTypes: []string{
+		"zip", "rar", "7z", "tar", "gz", "bz2", "xz", "iso",
+	}},
+	{Name: "Apps", FileTypes: []string{
+		"app", "exe", "dmg", "apk", "ipa",
+	}},
+	{Name: "Installers", FileTypes: []string{
+		"msi", "pkg", "deb", "rpm", "appimage",
+	}},
+	{Name: "Code", FileTypes: []string{
+		"go", "js", "ts", "jsx", "tsx", "html", "css", "scss", "json", "xml", "yaml", "yml",
+		"py", "java", "c", "cpp", "h", "hpp", "cs", "php", "rb", "rs", "kt", "swift", "sh",
+	}},
+	{Name: "Fonts", FileTypes: []string{
+		"ttf", "otf", "woff", "woff2", "eot",
+	}},
+	{Name: "Ebooks", FileTypes: []string{
+		"epub", "mobi", "azw", "azw3", "fb2",
+	}},
+	{Name: "Design", FileTypes: []string{
+		"psd", "ai", "xd", "fig", "sketch", "indd",
+	}},
+}}
 
 // OrganizedFolders -> TODO let the user define the organized folders over a JSON file
 type OrganizedFolders struct {
@@ -19,7 +63,30 @@ type OrganizedFolder struct {
 	FileTypes []string `json:"fileTypes"`
 }
 
-func loadConfig(folders OrganizedFolders) (OrganizedFolders, error) {
+func loadConfig() (OrganizedFolders, error) {
+
+	var folders OrganizedFolders
+
+	file, err := os.ReadFile("organizedFolders.json")
+	if err != nil {
+		folders = preOrganizedFolders
+		err := saveConfig(folders)
+		if err != nil {
+			return folders, err
+		}
+		return folders, nil
+	}
+
+	err = json.Unmarshal(file, &folders)
+	if err != nil {
+		folders = preOrganizedFolders
+		err := saveConfig(folders)
+		if err != nil {
+			return folders, err
+		}
+		return folders, nil
+	}
+
 	return folders, nil
 }
 
@@ -72,48 +139,13 @@ func main() {
 		dirPath = scanner.Text()
 	}
 
-	organizedFolder := []OrganizedFolder{
-		{Name: "Images", FileTypes: []string{
-			"jpg", "jpeg", "png", "gif", "webp", "svg", "bmp", "tiff", "tif", "heic", "heif", "ico", "raw",
-		}},
-		{Name: "Videos", FileTypes: []string{
-			"mp4", "mov", "avi", "mkv", "webm", "wmv", "flv", "mpeg", "mpg", "m4v", "3gp",
-		}},
-		{Name: "Audio", FileTypes: []string{
-			"mp3", "wav", "flac", "m4a", "ogg", "aac", "wma", "aiff", "alac", "mid", "midi",
-		}},
-		{Name: "Documents", FileTypes: []string{
-			"pdf", "doc", "docx", "odt", "rtf", "tex", "txt", "md", "csv",
-		}},
-		{Name: "Spreadsheets", FileTypes: []string{
-			"xls", "xlsx", "ods", "numbers",
-		}},
-		{Name: "Presentations", FileTypes: []string{
-			"ppt", "pptx", "odp", "key",
-		}},
-		{Name: "Archives", FileTypes: []string{
-			"zip", "rar", "7z", "tar", "gz", "bz2", "xz", "iso",
-		}},
-		{Name: "Apps", FileTypes: []string{
-			"app", "exe", "dmg", "apk", "ipa",
-		}},
-		{Name: "Installers", FileTypes: []string{
-			"msi", "pkg", "deb", "rpm", "appimage",
-		}},
-		{Name: "Code", FileTypes: []string{
-			"go", "js", "ts", "jsx", "tsx", "html", "css", "scss", "json", "xml", "yaml", "yml",
-			"py", "java", "c", "cpp", "h", "hpp", "cs", "php", "rb", "rs", "kt", "swift", "sh",
-		}},
-		{Name: "Fonts", FileTypes: []string{
-			"ttf", "otf", "woff", "woff2", "eot",
-		}},
-		{Name: "Ebooks", FileTypes: []string{
-			"epub", "mobi", "azw", "azw3", "fb2",
-		}},
-		{Name: "Design", FileTypes: []string{
-			"psd", "ai", "xd", "fig", "sketch", "indd",
-		}},
+	organizedFolders, err := loadConfig()
+	if err != nil {
+		fmt.Println("Error loading organized folders config (organizedFolders.json):", err)
+		return
 	}
+
+	organizedFolder := organizedFolders.OrganizedFolder
 
 	dir, err := os.ReadDir(dirPath)
 	if err != nil {
