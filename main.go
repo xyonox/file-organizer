@@ -53,7 +53,6 @@ var preOrganizedFolders OrganizedFolders = OrganizedFolders{OrganizedFolder: []O
 	}},
 }}
 
-// OrganizedFolders -> TODO let the user define the organized folders over a JSON file
 type OrganizedFolders struct {
 	OrganizedFolder []OrganizedFolder `json:"organizedFolders"`
 }
