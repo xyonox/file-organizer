@@ -177,6 +177,18 @@ func main() {
 			continue
 		}
 
+		founded := false
+
+		for _, organizedFolder := range organizedFolder {
+			if organizedFolder.Name == file.Name() {
+				founded = true
+			}
+		}
+
+		if founded {
+			continue
+		}
+
 		dirFolders = append(dirFolders, file.Name())
 	}
 
@@ -200,24 +212,41 @@ func main() {
 		}
 	}
 
+	dirFolders = append(dirFolders, "")
+
 	fmt.Println(dirFolders)
 
 	if *dryRunFlag {
 		fmt.Println("Dry run mode enabled. No files will be moved.")
 
-		for _, file := range dir {
-			if file.IsDir() {
-				continue
+		if *recursiveFlag {
+			for _, dirFolder := range dirFolders {
+				readDir, err := os.ReadDir(filepath.Join(dirPath, dirFolder))
+				if err != nil {
+					return
+				}
+				for _, file := range readDir {
+					if file.IsDir() {
+						continue
+					}
+					fmt.Printf("File %v/%v -> %v\n", dirFolder, file.Name(), match(organizedFolder, getFileType(file.Name())))
+				}
 			}
+		} else {
+			for _, file := range dir {
+				if file.IsDir() {
+					continue
+				}
 
-			matchStr := match(organizedFolder, getFileType(file.Name()))
+				matchStr := match(organizedFolder, getFileType(file.Name()))
 
-			if matchStr == "NONE" {
-				fmt.Printf("File %v would stay. Unknown file type\n", file.Name())
-				continue
+				if matchStr == "NONE" {
+					fmt.Printf("File %v would stay. Unknown file type\n", file.Name())
+					continue
+				}
+
+				fmt.Printf("File %v -> %v\n", file.Name(), matchStr)
 			}
-
-			fmt.Printf("File %v -> %v\n", file.Name(), matchStr)
 		}
 
 		return
