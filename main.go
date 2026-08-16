@@ -205,6 +205,8 @@ func main() {
 		}
 	}
 
+	// TODO: Add recursive directory scanning.
+
 	for _, file := range dir {
 		if file.IsDir() {
 			continue
