@@ -125,15 +125,23 @@ func getFileType(path string) string {
 	return strings.ToLower(strings.TrimPrefix(extension, "."))
 }
 
+func isAppDirectory(entry os.DirEntry) bool {
+	return entry.IsDir() && strings.EqualFold(filepath.Ext(entry.Name()), ".app")
+}
+
 func main() {
 
 	dryRunFlag := flag.Bool("dry-run", false, "dry run")
 
 	dirPathFlag := flag.String("d", "", "set the directory path")
 
+	recursiveFlag := flag.Bool("r", false, "recursive directory scanning")
+
 	flag.Parse()
 
 	dirPath := *dirPathFlag
+
+	fmt.Println(*recursiveFlag)
 
 	if dirPath == "" {
 		fmt.Println("Enter the path to the directory you want to organize:")
@@ -162,15 +170,37 @@ func main() {
 		return
 	}
 
-	fmt.Println(dir)
-
 	var dirFolders []string
 
 	for _, file := range dir {
-		if file.IsDir() {
-			dirFolders = append(dirFolders, file.Name())
+		if !file.IsDir() || isAppDirectory(file) {
+			continue
+		}
+
+		dirFolders = append(dirFolders, file.Name())
+	}
+
+	for i := 0; i < len(dirFolders); i++ {
+		dirFolder := dirFolders[i]
+
+		readDir, err := os.ReadDir(filepath.Join(dirPath, dirFolder))
+		if err != nil {
+			continue
+		}
+
+		for _, file := range readDir {
+			if !file.IsDir() || isAppDirectory(file) {
+				continue
+			}
+
+			nestedFolder := filepath.Join(dirFolder, file.Name())
+			dirFolders = append(dirFolders, nestedFolder)
+
+			fmt.Println(nestedFolder)
 		}
 	}
+
+	fmt.Println(dirFolders)
 
 	if *dryRunFlag {
 		fmt.Println("Dry run mode enabled. No files will be moved.")
