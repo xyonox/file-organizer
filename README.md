@@ -15,6 +15,8 @@ The project was created as a learning project for:
 - Recognizes file extensions regardless of uppercase or lowercase letters.
 - Loads folder and extension mappings from `organizedFolders.json`.
 - Supports a dry-run mode that shows planned moves without changing files.
+- Supports optional recursive scanning with the `-r` flag.
+- Leaves macOS `.app` bundles and configured category folders untouched.
 - Leaves unsupported files and existing directories untouched.
 
 ## Requirements
@@ -42,7 +44,19 @@ To preview the changes without moving any files, use `--dry-run`:
 go run . -d /path/to/directory --dry-run
 ```
 
-The `-d` and `--dry-run` flags can also be used with a built binary.
+To scan subdirectories as well, add the `-r` flag:
+
+```bash
+go run . -d /path/to/directory -r
+```
+
+The flags can also be combined for a recursive preview:
+
+```bash
+go run . -d /path/to/directory -r --dry-run
+```
+
+The `-d`, `-r` and `--dry-run` flags can also be used with a built binary.
 
 ## Building a binary
 
@@ -54,9 +68,15 @@ go build -o file-organizer .
 
 ## How it works
 
-The application reads the files directly inside the selected directory and matches
-their file extensions against the `organizedFolders` list. If no directory is
-provided with `-d`, the application prompts for one.
+By default, the application reads files directly inside the selected directory and
+matches their file extensions against the `organizedFolders` list. With the `-r`
+flag, it also scans nested subdirectories. Files found recursively are moved into
+the category folders in the selected directory.
+
+Configured category folders are not scanned again, and macOS application bundles
+whose names end in `.app` are skipped because they are directories containing an
+application. If no directory is provided with `-d`, the application prompts for
+one.
 
 On startup, the application loads `organizedFolders.json` from the current working
 directory. If the file does not exist or contains invalid JSON, the built-in default
@@ -92,8 +112,9 @@ The following folders are currently supported:
 | Ebooks        | `epub`, `mobi`, `azw`, `azw3`, `fb2`                                                                                                                                    |
 | Design        | `psd`, `ai`, `xd`, `fig`, `sketch`, `indd`                                                                                                                              |
 
-Matching files are moved into the corresponding folder. Files without a
-matching extension remain in the source directory.
+Matching files are moved into the corresponding folder. Files without a matching
+extension remain in their source directory. In dry-run mode, the planned moves are
+printed but no files are changed.
 
 ## Example output
 
@@ -118,14 +139,14 @@ Done!
 
 ## Current limitations
 
-- The application only organizes files directly inside the selected directory; it
-  does not scan subdirectories recursively.
+- Recursive scanning must be explicitly enabled with the `-r` flag.
 - Files with unsupported extensions are not moved.
+- Recursive moves place files from nested directories into the category folders in
+  the selected directory; the original subdirectory structure is not preserved.
 - The configuration file is loaded from the current working directory rather than
   from the directory being organized.
 - Existing files with the same name in a destination folder may cause a move error.
 
 ## Next steps
 
-- Add recursive directory scanning.
 - Improve error handling and reporting.
