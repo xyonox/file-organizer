@@ -141,8 +141,6 @@ func main() {
 
 	dirPath := *dirPathFlag
 
-	fmt.Println(*recursiveFlag)
-
 	if dirPath == "" {
 		fmt.Println("Enter the path to the directory you want to organize:")
 		fmt.Print("> ")
@@ -293,7 +291,7 @@ func main() {
 					fileType := filepath.Ext(fileName)
 					name := strings.TrimSuffix(fileName, fileType)
 
-					realNewPath = filepath.Join(dirPath, matchStr, fmt.Sprintf("%v %v.%v", name, index, fileType))
+					realNewPath = filepath.Join(dirPath, matchStr, fmt.Sprintf("%v %v%v", name, index, fileType))
 
 					_, err = os.Stat(realNewPath)
 					index++
@@ -304,8 +302,6 @@ func main() {
 				}
 
 				newPath = realNewPath
-
-				fmt.Println(newPath)
 
 				err = os.Rename(oldPath, newPath)
 				if err != nil {
@@ -350,8 +346,6 @@ func main() {
 			}
 
 			newPath = realNewPath
-
-			fmt.Println(newPath)
 
 			err = os.Rename(oldPath, newPath)
 			if err != nil {
