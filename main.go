@@ -259,9 +259,9 @@ func main() {
 	for _, organizedF := range organizedFolder {
 		folderPath := filepath.Join(dirPath, organizedF.Name)
 
-		err := os.Mkdir(folderPath, 0755)
-		if err != nil {
-			// Folder already exists
+		if err = os.MkdirAll(folderPath, 0755); err != nil {
+			fmt.Println("Error creating folder:", err)
+			return
 		}
 	}
 
