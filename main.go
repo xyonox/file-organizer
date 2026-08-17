@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-var preOrganizedFolders OrganizedFolders = OrganizedFolders{OrganizedFolder: []OrganizedFolder{
+var preOrganizedFolders = OrganizedFolders{OrganizedFolder: []OrganizedFolder{
 	{Name: "Images", FileTypes: []string{
 		"jpg", "jpeg", "png", "gif", "webp", "svg", "bmp", "tiff", "tif", "heic", "heif", "ico", "raw",
 	}},
@@ -33,10 +33,10 @@ var preOrganizedFolders OrganizedFolders = OrganizedFolders{OrganizedFolder: []O
 		"zip", "rar", "7z", "tar", "gz", "bz2", "xz", "iso",
 	}},
 	{Name: "Apps", FileTypes: []string{
-		"app", "exe", "dmg", "apk", "ipa",
+		"app", "exe", "apk", "ipa",
 	}},
 	{Name: "Installers", FileTypes: []string{
-		"msi", "pkg", "deb", "rpm", "appimage",
+		"msi", "pkg", "deb", "rpm", "appimage", "dmg",
 	}},
 	{Name: "Code", FileTypes: []string{
 		"go", "js", "ts", "jsx", "tsx", "html", "css", "scss", "json", "xml", "yaml", "yml",
@@ -282,7 +282,28 @@ func main() {
 					continue
 				}
 
-				err := os.Rename(filepath.Join(dirPath, dirFolder, file.Name()), filepath.Join(dirPath, matchStr, file.Name()))
+				oldPath := filepath.Join(dirPath, dirFolder, file.Name())
+				newPath := filepath.Join(dirPath, matchStr, file.Name())
+
+				index := 1
+				realNewPath := filepath.Join(dirPath, matchStr, file.Name())
+				for err == nil {
+					fileName := file.Name()
+
+					fileType := filepath.Ext(fileName)
+					name := strings.TrimSuffix(fileName, fileType)
+
+					realNewPath = filepath.Join(dirPath, matchStr, fmt.Sprintf("%v %v%v", name, index, fileType))
+
+					_, err = os.Stat(realNewPath)
+					index++
+				}
+
+				newPath = realNewPath
+
+				fmt.Println(newPath)
+
+				err = os.Rename(oldPath, newPath)
 				if err != nil {
 					fmt.Printf("Error moving %v: %v\n", file.Name(), err)
 					continue
@@ -303,7 +324,28 @@ func main() {
 				continue
 			}
 
-			err := os.Rename(filepath.Join(dirPath, file.Name()), filepath.Join(dirPath, matchStr, file.Name()))
+			oldPath := filepath.Join(dirPath, file.Name())
+			newPath := filepath.Join(dirPath, matchStr, file.Name())
+
+			index := 1
+			realNewPath := filepath.Join(dirPath, matchStr, file.Name())
+			for err == nil {
+				fileName := file.Name()
+
+				fileType := filepath.Ext(fileName)
+				name := strings.TrimSuffix(fileName, fileType)
+
+				realNewPath = filepath.Join(dirPath, matchStr, fmt.Sprintf("%v %v.%v", name, index, fileType))
+
+				_, err = os.Stat(realNewPath)
+				index++
+			}
+
+			newPath = realNewPath
+
+			fmt.Println(newPath)
+
+			err = os.Rename(oldPath, newPath)
 			if err != nil {
 				fmt.Printf("Error moving %v: %v\n", file.Name(), err)
 				continue
