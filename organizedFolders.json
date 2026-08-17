@@ -19,13 +19,6 @@
       ]
     },
     {
-      "comment": "This is a example",
-      "name": "test",
-      "fileTypes": [
-        "test"
-      ]
-    },
-    {
       "name": "Videos",
       "fileTypes": [
         "mp4",
@@ -107,7 +100,6 @@
       "fileTypes": [
         "app",
         "exe",
-        "dmg",
         "apk",
         "ipa"
       ]
@@ -119,7 +111,8 @@
         "pkg",
         "deb",
         "rpm",
-        "appimage"
+        "appimage",
+        "dmg"
       ]
     },
     {
