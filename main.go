@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -62,28 +63,27 @@ type OrganizedFolder struct {
 	FileTypes []string `json:"fileTypes"`
 }
 
+const configPath = "organizedFolders.json"
+
 func loadConfig() (OrganizedFolders, error) {
 
 	var folders OrganizedFolders
 
-	file, err := os.ReadFile("organizedFolders.json")
+	file, err := os.ReadFile(configPath)
 	if err != nil {
-		folders = preOrganizedFolders
-		err := saveConfig(folders)
-		if err != nil {
-			return folders, err
+		if errors.Is(err, os.ErrNotExist) {
+			folders := preOrganizedFolders
+			if err := saveConfig(folders); err != nil {
+				return OrganizedFolders{}, fmt.Errorf("create default config: %w", err)
+			}
+			return folders, nil
 		}
-		return folders, nil
+
+		return OrganizedFolders{}, fmt.Errorf("read config: %w", err)
 	}
 
-	err = json.Unmarshal(file, &folders)
-	if err != nil {
-		folders = preOrganizedFolders
-		err := saveConfig(folders)
-		if err != nil {
-			return folders, err
-		}
-		return folders, nil
+	if err := json.Unmarshal(file, &folders); err != nil {
+		return OrganizedFolders{}, fmt.Errorf("parse config: %w", err)
 	}
 
 	return folders, nil
@@ -95,7 +95,7 @@ func saveConfig(folders OrganizedFolders) error {
 		return err
 	}
 
-	err = os.WriteFile("organizedFolders.json", out, 0644)
+	err = os.WriteFile(configPath, out, 0644)
 	if err != nil {
 		return err
 	}
