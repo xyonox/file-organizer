@@ -137,6 +137,8 @@ func main() {
 
 	recursiveFlag := flag.Bool("r", false, "recursive directory scanning")
 
+	outputFlag := flag.String("o", "", "output directory path (where to move files)")
+
 	flag.Parse()
 
 	dirPath := *dirPathFlag
@@ -152,6 +154,11 @@ func main() {
 		}
 
 		dirPath = scanner.Text()
+	}
+
+	outputDir := dirPath
+	if *outputFlag != "" {
+		outputDir = *outputFlag
 	}
 
 	organizedFolders, err := loadConfig()
@@ -255,7 +262,7 @@ func main() {
 	fmt.Println("Starting to organize...")
 
 	for _, organizedF := range organizedFolder {
-		folderPath := filepath.Join(dirPath, organizedF.Name)
+		folderPath := filepath.Join(outputDir, organizedF.Name)
 
 		if err = os.MkdirAll(folderPath, 0755); err != nil {
 			fmt.Println("Error creating folder:", err)
@@ -281,17 +288,17 @@ func main() {
 				}
 
 				oldPath := filepath.Join(dirPath, dirFolder, file.Name())
-				newPath := filepath.Join(dirPath, matchStr, file.Name())
+				newPath := filepath.Join(outputDir, matchStr, file.Name())
 
 				index := 1
-				realNewPath := filepath.Join(dirPath, matchStr, file.Name())
+				realNewPath := filepath.Join(outputDir, matchStr, file.Name())
 				for {
 					fileName := file.Name()
 
 					fileType := filepath.Ext(fileName)
 					name := strings.TrimSuffix(fileName, fileType)
 
-					realNewPath = filepath.Join(dirPath, matchStr, fmt.Sprintf("%v %v%v", name, index, fileType))
+					realNewPath = filepath.Join(outputDir, matchStr, fmt.Sprintf("%v %v%v", name, index, fileType))
 
 					_, err = os.Stat(realNewPath)
 					index++
@@ -325,17 +332,17 @@ func main() {
 			}
 
 			oldPath := filepath.Join(dirPath, file.Name())
-			newPath := filepath.Join(dirPath, matchStr, file.Name())
+			newPath := filepath.Join(outputDir, matchStr, file.Name())
 
 			index := 1
-			realNewPath := filepath.Join(dirPath, matchStr, file.Name())
+			realNewPath := filepath.Join(outputDir, matchStr, file.Name())
 			for {
 				fileName := file.Name()
 
 				fileType := filepath.Ext(fileName)
 				name := strings.TrimSuffix(fileName, fileType)
 
-				realNewPath = filepath.Join(dirPath, matchStr, fmt.Sprintf("%v %v.%v", name, index, fileType))
+				realNewPath = filepath.Join(outputDir, matchStr, fmt.Sprintf("%v %v.%v", name, index, fileType))
 
 				_, err = os.Stat(realNewPath)
 				index++
