@@ -129,7 +129,6 @@ func isAppDirectory(entry os.DirEntry) bool {
 	return entry.IsDir() && strings.EqualFold(filepath.Ext(entry.Name()), ".app")
 }
 
-// TODO: Error handling. As an example duplicates in a OrganizedFolder
 func main() {
 
 	dryRunFlag := flag.Bool("dry-run", false, "dry run")
