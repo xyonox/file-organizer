@@ -16,6 +16,7 @@ The project was created as a learning project for:
 - Loads folder and extension mappings from `organizedFolders.json`.
 - Supports a dry-run mode that shows planned moves without changing files.
 - Supports optional recursive scanning with the `-r` flag.
+- Supports a separate output directory with the `-o` flag.
 - Leaves macOS `.app` bundles and configured category folders untouched.
 - Leaves unsupported files and existing directories untouched.
 
@@ -50,13 +51,22 @@ To scan subdirectories as well, add the `-r` flag:
 go run . -d /path/to/directory -r
 ```
 
+To place the organized files in a separate directory, use the `-o` flag:
+
+```bash
+go run . -d /path/to/directory -o /path/to/output-directory
+```
+
+The output directory and its category folders are created automatically. Without
+`-o`, the selected input directory is also used as the output directory.
+
 The flags can also be combined for a recursive preview:
 
 ```bash
 go run . -d /path/to/directory -r --dry-run
 ```
 
-The `-d`, `-r` and `--dry-run` flags can also be used with a built binary.
+The `-d`, `-r`, `-o` and `--dry-run` flags can also be used with a built binary.
 
 ## Building a binary
 
@@ -71,7 +81,8 @@ go build -o file-organizer .
 By default, the application reads files directly inside the selected directory and
 matches their file extensions against the `organizedFolders` list. With the `-r`
 flag, it also scans nested subdirectories. Files found recursively are moved into
-the category folders in the selected directory.
+the category folders in the output directory. The input directory is used as the
+output directory unless `-o` is provided.
 
 Configured category folders are not scanned again, and macOS application bundles
 whose names end in `.app` are skipped because they are directories containing an
@@ -79,9 +90,10 @@ application. If no directory is provided with `-d`, the application prompts for
 one.
 
 On startup, the application loads `organizedFolders.json` from the current working
-directory. If the file does not exist or contains invalid JSON, the built-in default
-categories are used and saved to that file. You can customize the categories by
-editing the JSON configuration. Each entry has a `name` and a `fileTypes` array:
+directory. If the file does not exist, the built-in default categories are used and
+saved to that file. Invalid JSON causes an error and stops the application. You can
+customize the categories by editing the JSON configuration. Each entry has a `name`
+and a `fileTypes` array:
 
 ```json
 {
@@ -105,16 +117,17 @@ The following folders are currently supported:
 | Spreadsheets  | `xls`, `xlsx`, `ods`, `numbers`                                                                                                                                         |
 | Presentations | `ppt`, `pptx`, `odp`, `key`                                                                                                                                             |
 | Archives      | `zip`, `rar`, `7z`, `tar`, `gz`, `bz2`, `xz`, `iso`                                                                                                                     |
-| Apps          | `app`, `exe`, `dmg`, `apk`, `ipa`                                                                                                                                       |
-| Installers    | `msi`, `pkg`, `deb`, `rpm`, `appimage`                                                                                                                                  |
+| Apps          | `app`, `exe`, `apk`, `ipa`                                                                                                                                              |
+| Installers    | `msi`, `pkg`, `deb`, `rpm`, `appimage`, `dmg`                                                                                                                           |
 | Code          | `go`, `js`, `ts`, `jsx`, `tsx`, `html`, `css`, `scss`, `json`, `xml`, `yaml`, `yml`, `py`, `java`, `c`, `cpp`, `h`, `hpp`, `cs`, `php`, `rb`, `rs`, `kt`, `swift`, `sh` |
 | Fonts         | `ttf`, `otf`, `woff`, `woff2`, `eot`                                                                                                                                    |
 | Ebooks        | `epub`, `mobi`, `azw`, `azw3`, `fb2`                                                                                                                                    |
 | Design        | `psd`, `ai`, `xd`, `fig`, `sketch`, `indd`                                                                                                                              |
 
-Matching files are moved into the corresponding folder. Files without a matching
-extension remain in their source directory. In dry-run mode, the planned moves are
-printed but no files are changed.
+Matching files are moved into the corresponding folder in the output directory.
+Files without a matching extension remain in their source directory. If a file
+with the same name already exists, a numbered filename is generated. In dry-run
+mode, the planned moves are printed but no files are changed.
 
 ## Example output
 
@@ -145,8 +158,5 @@ Done!
   the selected directory; the original subdirectory structure is not preserved.
 - The configuration file is loaded from the current working directory rather than
   from the directory being organized.
-- Existing files with the same name in a destination folder may cause a move error.
-
-## Next steps
-
-- Improve error handling and reporting.
+- Files are moved rather than copied, so successfully organized files are removed
+  from their original locations.
