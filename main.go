@@ -198,6 +198,7 @@ func main() {
 
 		readDir, err := os.ReadDir(filepath.Join(dirPath, dirFolder))
 		if err != nil {
+			fmt.Printf("Error reading directory %v: %v\n:", dirFolder, err)
 			continue
 		}
 
@@ -287,16 +288,20 @@ func main() {
 
 				index := 1
 				realNewPath := filepath.Join(dirPath, matchStr, file.Name())
-				for err == nil {
+				for {
 					fileName := file.Name()
 
 					fileType := filepath.Ext(fileName)
 					name := strings.TrimSuffix(fileName, fileType)
 
-					realNewPath = filepath.Join(dirPath, matchStr, fmt.Sprintf("%v %v%v", name, index, fileType))
+					realNewPath = filepath.Join(dirPath, matchStr, fmt.Sprintf("%v %v.%v", name, index, fileType))
 
 					_, err = os.Stat(realNewPath)
 					index++
+					if err == nil {
+						continue
+					}
+					break
 				}
 
 				newPath = realNewPath
@@ -329,7 +334,7 @@ func main() {
 
 			index := 1
 			realNewPath := filepath.Join(dirPath, matchStr, file.Name())
-			for err == nil {
+			for {
 				fileName := file.Name()
 
 				fileType := filepath.Ext(fileName)
@@ -339,6 +344,10 @@ func main() {
 
 				_, err = os.Stat(realNewPath)
 				index++
+				if err == nil {
+					continue
+				}
+				break
 			}
 
 			newPath = realNewPath
